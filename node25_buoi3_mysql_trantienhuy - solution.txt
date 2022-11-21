@@ -115,7 +115,7 @@
 		) AS t3
 	)
 	
--- 3) Tìm người dùng không hoạt động trong hệ thống
+-- 4) Tìm người dùng không hoạt động trong hệ thống
 	SELECT *
 	FROM users
 	LEFT JOIN orders
@@ -125,3 +125,13 @@
 	LEFT JOIN rate_res
 	ON users.user_id = rate_res.user_id
 	WHERE (orders.user_id IS NULL AND orders.food_id IS NULL) AND (like_res.date_like IS NULL) AND (rate_res.date_rate IS NULL)
+	
+-- 5) Tính trung bình sub_food của một food
+	SELECT food.food_id, food.food_name, number_sub_food
+	FROM food
+	JOIN (
+		SELECT sub_food.food_id, COUNT(*) AS number_sub_food
+		FROM sub_food
+		GROUP BY sub_food.food_id
+	) AS t2
+	ON food.food_id = t2.food_id
